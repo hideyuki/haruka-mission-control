@@ -4,11 +4,11 @@
             <div class="chart-title">Solar Panel (V)</div>
             <div class="chart-title">Lead Battery (V)</div>
             <div class="chart-title">Battery Level</div>
-            <div class="chart-title">Power Status</div>
+            <div class="chart-title">Power Source</div>
         </div>
         <div class="chart-container">
-            <RealtimeLineChart class="chart"/>
-            <RealtimeLineChart class="chart"/>
+            <RealtimeLineChart class="chart" :value="solarVoltage"/>
+            <RealtimeLineChart class="chart" :value="batteryVoltage"/>
             <div class="chart" :class="['battery-level', batteryLevelClass]">
                 <span class="battery-level-number">{{ batteryLevel }}</span>
                 <span class="battery-level-percent">%</span>
@@ -24,10 +24,10 @@
             <div class="chart-title">Circuit (A)</div>
         </div>
         <div class="chart-container">
-            <RealtimeLineChart class="chart"/>
-            <RealtimeLineChart class="chart"/>
-            <RealtimeLineChart class="chart"/>
-            <RealtimeLineChart class="chart"/>
+            <RealtimeLineChart class="chart" :value="solarCurrent"/>
+            <RealtimeLineChart class="chart" :value="batteryCurrent"/>
+            <RealtimeLineChart class="chart" :value="motorCurrent"/>
+            <RealtimeLineChart class="chart" :value="circuitCurrent" :yMax="3"/>
         </div>
 
         <div class="chart-container" style="margin-top: 10px">
@@ -37,9 +37,9 @@
             <div class="chart-title">Attitude</div>
         </div>
         <div class="chart-container">
-            <RealtimeLineChart class="chart"/>
-            <RealtimeLineChart class="chart"/>
-            <RealtimeLineChart class="chart"/>
+            <RealtimeLineChart class="chart" :value="temperature" :yMax="40"/>
+            <RealtimeLineChart class="chart" :value="humidity" :yMax="100"/>
+            <RealtimeLineChart class="chart" :value="pressure" :yMax="1500"/>
             <div class="chart attitude-container">
                 <div class="attitude-body">
                     <div class="pitch-roll" :style="{'transform': 'rotate(' + rollAngle + 'deg)'}">
@@ -61,7 +61,43 @@
 
   export default {
     props: {
+      solarVoltage: {
+        type:    Number,
+        default: 0
+      },
+      solarCurrent: {
+        type:    Number,
+        default: 0
+      },
+      batteryVoltage: {
+        type:    Number,
+        default: 0
+      },
+      batteryCurrent: {
+        type:    Number,
+        default: 0
+      },
       batteryLevel: {
+        type:    Number,
+        default: 0
+      },
+      motorCurrent: {
+        type:    Number,
+        default: 0
+      },
+      circuitCurrent: {
+        type:    Number,
+        default: 0
+      },
+      temperature: {
+        type:    Number,
+        default: 0
+      },
+      humidity: {
+        type:    Number,
+        default: 0
+      },
+      pressure: {
         type:    Number,
         default: 0
       },
@@ -145,8 +181,8 @@
 
     .power-status {
         text-align: center;
-        padding-top: 15px;
-        font-size: 20px;
+        padding-top: 12px;
+        font-size: 30px;
         font-weight: bold;
     }
 
