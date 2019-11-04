@@ -1,8 +1,9 @@
 <template>
     <v-container fluid grey lighten-5 class="mct-container">
         <div>
-            <PowerManagement/>
-            <Sensors/>
+            <PowerManagement :batteryLevel="batteryLevel"
+                             :pitchAngle="0"
+                             :rollAngle="0"/>
         </div>
         <div>
             <Map/>
@@ -10,7 +11,7 @@
         <div>
             <div class="lidar-output">
                 <div class="lidar">
-                    <Lidar/>
+                    <Lidar :lidarData="lidarData"/>
                 </div>
                 <div class="output">
                     <OutputLog :logs="logs"/>
@@ -28,13 +29,22 @@
   import Map from '@/components/Map'
   import Streaming360Video from '@/components/Streaming360Video'
   import Lidar from '@/components/Lidar'
-  import Sensors from '@/components/Sensors'
   import OutputLog from '@/components/OutputLog'
+
+  const SAMPLES = 920
 
   export default {
     data () {
+      const data = []
+      for (let i = 0; i < SAMPLES; i++) {
+        data.push(10)
+      }
+
       return {
-        logs: []
+        logs:          [],
+        lidarData:     data,
+        solarVoltages: [],
+        batteryLevel:  50
       }
     },
 
@@ -48,13 +58,12 @@
       Map,
       Streaming360Video,
       Lidar,
-      Sensors,
       OutputLog
     }
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
     .mct-container {
         display: grid;
         grid-template-columns: 1fr 1fr;

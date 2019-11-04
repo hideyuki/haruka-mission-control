@@ -1,6 +1,8 @@
 <template>
     <div class="log">
-        <div v-for="(log, index) in logs.reverse()" :key="index">
+        <h4>Output Log</h4>
+
+        <div v-for="(log, index) in logs.slice().reverse()" :key="index">
             {{ log }}
         </div>
     </div>
@@ -18,10 +20,11 @@
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
     .log {
         color: #666666;
         font-size: 13px;
         width: 100%;
+        margin: 50px 5px 5px 5px;
     }
 </style>

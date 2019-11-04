@@ -9,22 +9,8 @@
   import LidarChart from '@/components/charts/LidarChart.js'
   import LidarAngleChart from '@/components/charts/LidarAngleChart.js'
 
-  const SAMPLES = 920
-
   export default {
-    data () {
-      const data = []
-      for (let i = 0; i < SAMPLES; i++) {
-        data.push(10)
-      }
-
-      return {
-        lidarData: data
-      }
-    },
-
-    computed: {
-    },
+    props: ['lidarData'],
 
     mounted () {
       // setInterval(() => {
@@ -44,7 +30,7 @@
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
     .angle-chart {
         position: absolute;
         height: 300px;
