@@ -1,5 +1,5 @@
 <template>
-    <v-container fluid grey lighten-5 class="mct-contaienr">
+    <v-container fluid grey lighten-5 class="mct-container">
         <div>
             <PowerManagement/>
             <Sensors/>
@@ -8,8 +8,14 @@
             <Map/>
         </div>
         <div>
-            <Lidar/>
-            <OutputLog/>
+            <div class="lidar-output">
+                <div class="lidar">
+                    <Lidar/>
+                </div>
+                <div class="output">
+                    <OutputLog :logs="logs"/>
+                </div>
+            </div>
         </div>
         <div>
             <Streaming360Video/>
@@ -27,8 +33,16 @@
 
   export default {
     data () {
-      return {}
+      return {
+        logs: []
+      }
     },
+
+    mounted () {
+      this.logs.push('test')
+      this.logs.push('333')
+    },
+
     components: {
       PowerManagement,
       Map,
@@ -41,9 +55,24 @@
 </script>
 
 <style lang="scss">
-    .mct-contaienr {
+    .mct-container {
         display: grid;
         grid-template-columns: 1fr 1fr;
         grid-template-rows: calc(50vh - 56px) calc(50vh - 56px);
+    }
+
+    .lidar-output {
+        display: flex;
+
+        .lidar {
+            position: relative;
+        }
+
+        .output {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            min-height: 100%;
+        }
     }
 </style>

@@ -1,65 +1,61 @@
 <template>
     <div>
-        <LidarChart :chart-data="chartData" :options="chartOptions"/>
+        <LidarAngleChart class="angle-chart"/>
+        <LidarChart :lidarData="lidarData" class="chart"/>
     </div>
 </template>
 
 <script>
   import LidarChart from '@/components/charts/LidarChart.js'
+  import LidarAngleChart from '@/components/charts/LidarAngleChart.js'
 
   const SAMPLES = 920
 
   export default {
     data () {
+      const data = []
+      for (let i = 0; i < SAMPLES; i++) {
+        data.push(10)
+      }
+
       return {
-        chartOptions: {
-          responsive:   true,
-          animation:    false,
-          showTooltips: false,
-          legend:       {
-            display: false
-          },
-          scale:        {
-            angleLines: {
-              display: false
-            },
-            ticks:      {
-              suggestedMin: 0,
-              suggestedMax: 40
-            }
-          }
-        }
+        lidarData: data
       }
     },
 
-    computed:   {
-      chartData () {
-        const data = []
-        const labels = []
-        for (let i = 0; i < SAMPLES; i++) {
-          data.push(20)
-          labels.push('')
-        }
-
-        console.log(data)
-
-        return {
-          labels:   labels,
-          datasets: [{
-            label:                "運動量",
-            backgroundColor:      '#00000000',
-            borderColor:          '#FF0000',
-            pointBackgroundColor: '#FF0000',
-            data:                 data
-          }]
-        }
-      }
+    computed: {
     },
+
+    mounted () {
+      // setInterval(() => {
+      //   const d = Number.parseInt(Math.random() * 40)
+      //   const data = []
+      //   for (let i = 0; i < SAMPLES; i++) {
+      //     this.$set(this.lidarData, i, d)
+      //   }
+      //   console.log(this.lidarData)
+      // }, 1000)
+    },
+
     components: {
-      LidarChart
+      LidarChart,
+      LidarAngleChart
     }
   }
 </script>
 
 <style lang="scss">
+    .angle-chart {
+        position: absolute;
+        height: 300px;
+        min-height: 300px;
+        width: 300px;
+    }
+
+    .chart {
+        position: relative;
+        height: 300px;
+        min-height: 300px;
+        width: 300px;
+    }
 </style>
