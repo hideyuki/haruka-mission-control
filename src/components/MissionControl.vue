@@ -21,6 +21,7 @@
         <div>
             <Streaming360Video/>
         </div>
+        <div v-gamepad:left-analog-up.repeat="onUp" />
     </v-container>
 </template>
 
@@ -41,6 +42,13 @@
       }
 
       return {
+        isConnectedGamepad: false,
+
+        // inputs
+        screwThrottle: 0.0,
+        screwDirection: 0.0,
+
+        // outputs
         logs:          [],
         lidarData:     data,
         solarVoltages: [],
@@ -48,9 +56,57 @@
       }
     },
 
+    methods: {
+      onConnectedGamepad (e) {
+        this.isConnectedGamepad = true
+        window.requestAnimationFrame(this.checkGamepad)
+      },
+
+      onDisconnectedGamepad (e) {
+        this.isConnectedGamepad = false
+      },
+
+      checkGamepad () {
+        if (!this.isConnectedGamepad) {
+          return
+        }
+
+        const gamepads = navigator.getGamepads()
+        if (gamepads.length > 0) {
+          const gamepad = gamepads[0]
+
+          if(gamepad){
+            // up-down of right analog stick is the throttle of the screw
+            // up: -1, down: +1
+            let upDown = -1 * gamepad.axes[3]
+            if (upDown < 0) {
+              upDown = 0
+            }
+            this.screwThrottle = upDown
+
+            // left-right of left analog stick is the direction of the screw
+            // left: -1, right: +1
+            this.screwDirection = gamepad.axes[0]
+
+            // console.log(this.screwThrottle, this.screwDirection)
+          }
+        }
+
+        window.requestAnimationFrame(this.checkGamepad)
+      }
+    },
+
     mounted () {
       this.logs.push('test')
       this.logs.push('333')
+
+      window.addEventListener('gamepadconnected', this.onConnectedGamepad)
+      window.addEventListener('gamepaddisconnected', this.onDisconnectedGamepad)
+    },
+
+    destroyed: function () {
+      window.removeEventListener('gamepadconnected', this.onConnectedGamepad)
+      window.removeEventListener('gamepaddisconnected', this.onDisconnectedGamepad)
     },
 
     components: {
