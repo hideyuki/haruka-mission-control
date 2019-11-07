@@ -9,7 +9,7 @@
         </v-app-bar>
 
         <v-content>
-            <MissionControl/>
+            <MissionControl onChangeController="onChangeController"/>
         </v-content>
     </v-app>
 </template>
@@ -18,6 +18,12 @@
   import MissionControl from '@/components/MissionControl';
 
   export default {
+    methods: {
+      onChangeController (throttle, direction) {
+        console.log(throttle, direction)
+      }
+    },
+
     components: {
       MissionControl,
     }

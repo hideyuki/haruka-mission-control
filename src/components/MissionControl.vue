@@ -21,7 +21,6 @@
         <div>
             <Streaming360Video/>
         </div>
-        <div v-gamepad:left-analog-up.repeat="onUp" />
     </v-container>
 </template>
 
@@ -32,9 +31,13 @@
   import Lidar from '@/components/Lidar'
   import OutputLog from '@/components/OutputLog'
 
-  const SAMPLES = 920
+  const {ipcRenderer} = require('electron')
+
+  const SAMPLES = 92  // 920
 
   export default {
+    props: ['onChangeController'],
+
     data () {
       const data = []
       for (let i = 0; i < SAMPLES; i++) {
@@ -45,7 +48,7 @@
         isConnectedGamepad: false,
 
         // inputs
-        screwThrottle: 0.0,
+        screwThrottle:  0.0,
         screwDirection: 0.0,
 
         // outputs
@@ -75,7 +78,7 @@
         if (gamepads.length > 0) {
           const gamepad = gamepads[0]
 
-          if(gamepad){
+          if (gamepad) {
             // up-down of right analog stick is the throttle of the screw
             // up: -1, down: +1
             let upDown = -1 * gamepad.axes[3]
@@ -89,10 +92,25 @@
             this.screwDirection = gamepad.axes[0]
 
             // console.log(this.screwThrottle, this.screwDirection)
+            ipcRenderer.sendSync('usv-control', {
+              throttle:  this.screwThrottle,
+              direction: this.screwDirection
+            })
           }
         }
 
         window.requestAnimationFrame(this.checkGamepad)
+      },
+
+      onReceiveUsvSensorData (event, arg) {
+        // console.log('onReceiveUsvSensorData', arg)
+
+        if (arg.lidars.length === SAMPLES) {
+          console.log('ok', arg)
+          this.lidarData = arg.lidars.map((l) => {
+            return l / 10
+          })
+        }
       }
     },
 
@@ -102,11 +120,15 @@
 
       window.addEventListener('gamepadconnected', this.onConnectedGamepad)
       window.addEventListener('gamepaddisconnected', this.onDisconnectedGamepad)
+
+      ipcRenderer.on('usv-sensor-data', this.onReceiveUsvSensorData)
     },
 
     destroyed: function () {
       window.removeEventListener('gamepadconnected', this.onConnectedGamepad)
       window.removeEventListener('gamepaddisconnected', this.onDisconnectedGamepad)
+
+      ipcRenderer.off('usv-sensor-data', this.onReceiveUsvSensorData)
     },
 
     components: {

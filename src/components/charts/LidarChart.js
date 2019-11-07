@@ -2,7 +2,7 @@ import {Radar, mixins} from 'vue-chartjs'
 
 const {reactiveData} = mixins
 
-const SAMPLES = 920
+const SAMPLES = 92  // 920
 
 export default {
   extends: Radar,
@@ -51,7 +51,7 @@ export default {
       return {
         labels:   this.labels,
         datasets: [{
-          pointRadius:          0.5,
+          pointRadius:          1.8,
           pointBorderColor:     '#00000000',
           backgroundColor:      '#00000000',
           borderColor:          '#00000000',

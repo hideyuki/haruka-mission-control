@@ -3,6 +3,7 @@
 ## Project setup
 ```
 npm install
+./node_modules/.bin/electron-rebuild
 ```
 
 ### Compiles and hot-reloads for development

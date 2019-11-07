@@ -1,10 +1,15 @@
 'use strict'
 
-import {app, protocol, BrowserWindow} from 'electron'
+import {app, protocol, BrowserWindow, ipcMain} from 'electron'
 import {
   createProtocol,
   installVueDevtools
 } from 'vue-cli-plugin-electron-builder/lib'
+
+const SerialPort = require('serialport')
+const Readline = require('@serialport/parser-readline')
+
+const harukaPb = require('./libs/haruka_pb')
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
@@ -90,3 +95,42 @@ if (isDevelopment) {
     })
   }
 }
+
+ipcMain.on('usv-control', (event, arg) => {
+  console.log('####', arg)
+  event.returnValue = 'ok'
+
+})
+
+const port = new SerialPort('/dev/tty.usbserial-MW2HGNYP', {baudRate: 115200})
+const parser = new Readline({ delimiter: '\r\n' })
+port.pipe(parser)
+
+port.on('open', function () {
+  console.log('Serial open.')
+})
+
+parser.on('data', function (data) {
+  try {
+    // console.log('Data', data)
+
+    const sensorData = JSON.parse(data)
+    // console.log(sensorData)
+
+    if (win) {
+      win.webContents.send('usv-sensor-data', sensorData)
+    }
+
+    //const base64Data = new Buffer(data).toString('base64')
+  //   const h = harukaPb.SensorData.deserializeBinary(data)
+  //   console.log(h.toObject())
+  //
+  //   if (win) {
+  //     win.webContents.send('usv-sensor-data', h.toObject())
+  //   }
+  }
+  catch (err) {
+    // console.log(err)
+  }
+})
+
