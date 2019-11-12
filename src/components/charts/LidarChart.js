@@ -51,7 +51,7 @@ export default {
       return {
         labels:   this.labels,
         datasets: [{
-          pointRadius:          1.8,
+          pointRadius:          1.5,
           pointBorderColor:     '#00000000',
           backgroundColor:      '#00000000',
           borderColor:          '#00000000',

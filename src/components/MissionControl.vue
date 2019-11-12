@@ -1,9 +1,7 @@
 <template>
     <v-container fluid grey lighten-5 class="mct-container">
         <div>
-            <PowerManagement :batteryLevel="batteryLevel"
-                             :pitchAngle="0"
-                             :rollAngle="0"/>
+            <PowerManagement :sensorData="sensorData"/>
         </div>
         <div>
             <Map/>
@@ -11,7 +9,7 @@
         <div>
             <div class="lidar-output">
                 <div class="lidar">
-                    <Lidar :lidarData="lidarData"/>
+                    <Lidar :sensorData="sensorData"/>
                 </div>
                 <div class="output">
                     <OutputLog :logs="logs"/>
@@ -33,17 +31,10 @@
 
   const {ipcRenderer} = require('electron')
 
-  const SAMPLES = 92  // 920
-
   export default {
     props: ['onChangeController'],
 
     data () {
-      const data = []
-      for (let i = 0; i < SAMPLES; i++) {
-        data.push(10)
-      }
-
       return {
         isConnectedGamepad: false,
 
@@ -52,10 +43,8 @@
         screwDirection: 0.0,
 
         // outputs
-        logs:          [],
-        lidarData:     data,
-        solarVoltages: [],
-        batteryLevel:  50
+        logs: [],
+        sensorData: null
       }
     },
 
@@ -103,14 +92,9 @@
       },
 
       onReceiveUsvSensorData (event, arg) {
-        // console.log('onReceiveUsvSensorData', arg)
-
-        if (arg.lidars.length === SAMPLES) {
-          console.log('ok', arg)
-          this.lidarData = arg.lidars.map((l) => {
-            return l / 10
-          })
-        }
+        console.log('onReceiveUsvSensorData', arg)
+        arg.rollAngle = 12.2
+        this.sensorData = arg
       }
     },
 

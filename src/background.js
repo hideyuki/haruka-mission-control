@@ -9,8 +9,6 @@ import {
 const SerialPort = require('serialport')
 const Readline = require('@serialport/parser-readline')
 
-const harukaPb = require('./libs/haruka_pb')
-
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -113,21 +111,11 @@ port.on('open', function () {
 parser.on('data', function (data) {
   try {
     // console.log('Data', data)
-
     const sensorData = JSON.parse(data)
-    // console.log(sensorData)
 
     if (win) {
       win.webContents.send('usv-sensor-data', sensorData)
     }
-
-    //const base64Data = new Buffer(data).toString('base64')
-  //   const h = harukaPb.SensorData.deserializeBinary(data)
-  //   console.log(h.toObject())
-  //
-  //   if (win) {
-  //     win.webContents.send('usv-sensor-data', h.toObject())
-  //   }
   }
   catch (err) {
     // console.log(err)

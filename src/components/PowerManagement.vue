@@ -61,58 +61,27 @@
 
   export default {
     props: {
-      solarVoltage: {
-        type:    Number,
-        default: 0
-      },
-      solarCurrent: {
-        type:    Number,
-        default: 0
-      },
-      batteryVoltage: {
-        type:    Number,
-        default: 0
-      },
-      batteryCurrent: {
-        type:    Number,
-        default: 0
-      },
-      batteryLevel: {
-        type:    Number,
-        default: 0
-      },
-      motorCurrent: {
-        type:    Number,
-        default: 0
-      },
-      circuitCurrent: {
-        type:    Number,
-        default: 0
-      },
-      temperature: {
-        type:    Number,
-        default: 0
-      },
-      humidity: {
-        type:    Number,
-        default: 0
-      },
-      pressure: {
-        type:    Number,
-        default: 0
-      },
-      rollAngle: {
-        type: Number,
-        default: 0
-      },
-      pitchAngle: {
-        type: Number,
-        default: 0
+      sensorData: {
+        type:    Object,
+        default: null
       }
     },
 
     data () {
       return {
+        solarVoltage: 0,
+        solarCurrent: 0,
+        batteryVoltage: 0,
+        batteryCurrent: 0,
+        batteryLevel: 0,
+        motorCurrent: 0,
+        circuitCurrent: 0,
+        temperature: 0,
+        humidity: 0,
+        pressure: 0,
+        rollAngle: 0,
+        pitchAngle: 0,
+
         rollPitchZeroImage: RollPitchZeroImage,
         pitchImage:         PitchImage,
         rollImage:          RollImage
@@ -125,6 +94,74 @@
           return 'low'
         } else {
           return 'normal'
+        }
+      }
+    },
+
+    watch: {
+      sensorData (val) {
+        if ('solarVoltage' in val) {
+          this.solarVoltage = val.solarVoltage
+        } else {
+          this.solarVoltage = 0
+        }
+        if ('solarCurrent' in val) {
+          this.solarCurrent = val.solarCurrent
+        } else {
+          this.solarCurrent = 0
+        }
+        if ('batteryVoltage' in val) {
+          this.batteryVoltage = val.batteryVoltage
+        } else {
+          this.batteryVoltage = 0
+        }
+        if ('batteryCurrent' in val) {
+          this.batteryCurrent = val.batteryCurrent
+        } else {
+          this.batteryCurrent = 0
+        }
+        if ('batteryLevel' in val) {
+          this.batteryLevel = val.batteryLevel
+        } else {
+          this.batteryLevel = 0
+        }
+
+        if ('motorCurrent' in val) {
+          this.motorCurrent = val.motorCurrent
+        } else {
+          this.motorCurrent = 0
+        }
+        if ('circuitCurrent' in val) {
+          this.circuitCurrent = val.circuitCurrent
+        } else {
+          this.circuitCurrent = 0
+        }
+
+        if ('temperature' in val) {
+          this.temperature = val.temperature
+        } else {
+          this.temperature = 0
+        }
+        if ('humidity' in val) {
+          this.humidity = val.humidity
+        } else {
+          this.humidity = 0
+        }
+        if ('pressure' in val) {
+          this.pressure = val.pressure
+        } else {
+          this.pressure = 0
+        }
+
+        if ('rollAngle' in val) {
+          this.rollAngle = val.rollAngle
+        } else {
+          this.rollAngle = 0
+        }
+        if ('pitchAngle' in val) {
+          this.pitchAngle = val.pitchAngle
+        } else {
+          this.pitchAngle = 0
         }
       }
     },

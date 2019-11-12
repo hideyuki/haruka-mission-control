@@ -9,18 +9,31 @@
   import LidarChart from '@/components/charts/LidarChart.js'
   import LidarAngleChart from '@/components/charts/LidarAngleChart.js'
 
-  export default {
-    props: ['lidarData'],
+  const SAMPLES = 92  // 920
 
-    mounted () {
-      // setInterval(() => {
-      //   const d = Number.parseInt(Math.random() * 40)
-      //   const data = []
-      //   for (let i = 0; i < SAMPLES; i++) {
-      //     this.$set(this.lidarData, i, d)
-      //   }
-      //   console.log(this.lidarData)
-      // }, 1000)
+  export default {
+    props: ['sensorData'],
+
+    data () {
+      const data = []
+      for (let i = 0; i < SAMPLES; i++) {
+        data.push(0)
+      }
+
+      return {
+        lidarData: data
+      }
+    },
+
+    watch: {
+      sensorData (val) {
+        if (val.lidars && val.lidars.length === SAMPLES) {
+          //this.lidarData = val.lidars
+          this.lidarData = val.lidars.map((l) => {
+            return l / 10
+          })
+        }
+      }
     },
 
     components: {
